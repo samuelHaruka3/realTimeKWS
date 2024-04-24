@@ -17,20 +17,26 @@ To install RealTimeKWS, follow these steps:
 1. Clone the repository:
 ```
 git clone https://github.com/samuelHaruka3/realTimeKWS.git
+```
 2.Navigate to the directory where you cloned the repository:
-
+```
 cd realTimeKWS
+```
 3.Create a Conda environment using the environment.yml file included in the repository:
-
+```
 conda env create -f environment.yml
+```
 ## Using RealTimeKWS
 To use RealTimeKWS, follow these steps:
 
 Activate the newly created Conda environment:
-
+```
 conda activate pytorch
+```
 Run the main script to start the real-time keyword spotting application:
+```
 python GUIPyQt5.py
+```
 
 ##Contributors
 We appreciate all contributions. If you contribute to this project, please add your name to the list below:
