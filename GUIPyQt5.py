@@ -351,7 +351,7 @@ if __name__ == '__main__':
     snn_ckp_dir = os.path.join('/Users/samuelzhou/Desktop/2011/pythonProject10/')
 
     # Load the pretrain model to execute inferences
-    pretrain = torch.load(snn_ckp_dir + 'model.pt', map_location=torch.device('mps'))
+    pretrain = torch.load('model.pt', map_location=torch.device('mps'))
     net.load_state_dict(pretrain['model_state_dict'], strict=False)
 
     optimizer = Adam(net.parameters(), lr=lr)
@@ -360,7 +360,7 @@ if __name__ == '__main__':
     warmup_epochs = 1
     print(net)
     writer = SummaryWriter('./logs/')
-
+    #
     criterion = nn.CrossEntropyLoss().to(device)
     test_best_acc = 0
 
@@ -449,8 +449,11 @@ class AudioProcessingThread(QThread):
         p = pyaudio.PyAudio()
         stream = p.open(format=self.FORMAT, channels=1, rate=self.RATE, input=True, frames_per_buffer=self.CHUNK)
 
+        frames = deque(maxlen=8)  # Use a deque to keep the last 8 bunches
+
+
         while self.running:
-            frames = []
+
             global start_time
             start_time = time.time()
             for _ in range(0,int(self.BUNCH)):
@@ -460,25 +463,30 @@ class AudioProcessingThread(QThread):
                 # if _%2==0:
                 #     self.update_waveform_signal.emit(data_np1)
                 #     time.sleep(0.02)
-
                 self.update_waveform_signal.emit(data_np1)
+
+                # If we've collected at least 8 bunches, start prediction every 4 bunches
+                if len(frames) == 8 and _ % 4 == 3:
+                    print("update_prediction before function", time.time() - start_time)
+                    # Use a copy of the data to prevent changes during prediction
+                    data_np_to_predict = np.frombuffer(b''.join(frames), dtype=np.int16).copy()
+                    prediction_thread = Thread(target=self.handle_prediction, args=(data_np_to_predict,))
+                    prediction_thread.start()
+                    print("update_prediction after function", time.time() - start_time)
+
                 time.sleep(0.125)
 
 
             print(len(frames))
             data_np = np.frombuffer(b''.join(frames), dtype=np.int16).copy()
             print(data_np.shape)
-            print("update_prediction before function", time.time()-start_time)
+
 
             # new_predictions = predict(data_np)
             # for i in range(12):
             #     self.predictions_deque[i].append(new_predictions[i])
             #     # print(self.predictions_deque[i])
             # self.update_prediction_signal.emit(self.predictions_deque)
-            prediction_thread = Thread(target=self.handle_prediction, args=(data_np,))
-            prediction_thread.start()
-            print("update_prediction after function", time.time()-start_time)
-
             data_float = data_np/ 32768.0
             # Generate Mel spectrogram
 
