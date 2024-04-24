@@ -33,19 +33,21 @@ Activate the newly created Conda environment:
 ```
 conda activate pytorch
 ```
+
 Run the main script to start the real-time keyword spotting application:
+
 ```
 python GUIPyQt5.py
 ```
 
-##Contributors
+## Contributors
 We appreciate all contributions. If you contribute to this project, please add your name to the list below:
 
 @samuelHaruka3
 
 The spiking jelly package is used.License below.
 
-##Contact
+## Contact
 If you want to contact me you can reach me at <20102567d@connect.polyu.hk>.
 ##License
 This project uses the following license: MIT.
