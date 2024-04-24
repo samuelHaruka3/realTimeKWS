@@ -49,7 +49,7 @@ The spiking jelly package is used.License below.
 
 ## Contact
 If you want to contact me you can reach me at <20102567d@connect.polyu.hk>.
-##License
+## License
 This project uses the following license: MIT.
 
 ## Acknowledgments
