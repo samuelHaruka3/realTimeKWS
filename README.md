@@ -43,7 +43,7 @@ python GUIPyQt5.py
 ## Contributors
 We appreciate all contributions. If you contribute to this project, please add your name to the list below:
 
-@samuelHaruka3
+- [@samuelHaruka3](https://github.com/samuelHaruka3)
 
 The spiking jelly package is used.License below.
 
